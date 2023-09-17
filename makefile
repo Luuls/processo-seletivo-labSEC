@@ -7,7 +7,6 @@ BIN_DIR = bin
 
 EXERCISES = fixed_xor hex_to_base64
 
-
 UTILITIES_SRC = utilities.cpp
 UTILITIES_OBJ = $(BUILD_DIR)/utilities.o
 
