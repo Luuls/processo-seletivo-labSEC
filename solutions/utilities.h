@@ -7,6 +7,8 @@ std::string padStringWithChar(const std::string& word, char c, size_t sizeToFixT
 
 std::string hexToBin(const std::string& hexString);
 
+std::string binToHex(const std::string& binString);
+
 std::string decimalToBin(unsigned int decimalValue);
 
 unsigned int binToDecimal(const std::string binString);
