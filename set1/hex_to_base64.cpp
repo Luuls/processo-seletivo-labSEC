@@ -14,7 +14,7 @@ std::string decimalToBin(unsigned int decimalValue);
 
 size_t binToDecimal(const std::string binString);
 
-std::string fillBinWithZeroes(const std::string& binString, size_t byteSize, bool side);
+std::string padStringWithChar(const std::string& word, char c, size_t sizeToFixTo, bool side);
 
 bool isHexSymbol(char symbol);
 
@@ -24,6 +24,7 @@ int main(int argc, const char* argv[]) {
         input = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
         std::cout << "You didn't pass any hex string as argument.\nBy default, this program will use the following string as input:\n";
         std::cout << input;
+        std::cout << "\n\nbase64 result:\n";
     }
     else if (argc > 2) {
         std::cout << "Usage: " << argv[0] << " [hex string]\n";
@@ -33,7 +34,7 @@ int main(int argc, const char* argv[]) {
         input = argv[1];
     }
 
-    std::cout << "\n\nbase64 result:\n";
+
     std::cout << hexToBase64(input) << '\n';
 
     return 0;
@@ -45,7 +46,7 @@ std::string hexToBase64(const std::string& hexString) {
 
     string binString = hexToBin(hexString);
 
-    binString = fillBinWithZeroes(binString, 6, true);
+    binString = padStringWithChar(binString, '0', 6, true);
 
     vector<string> sixBitBytes(std::ceil((float)binString.length() / 6));
 
@@ -60,6 +61,7 @@ std::string hexToBase64(const std::string& hexString) {
         base64String += base64Symbols[binToDecimal(code)];
     }
 
+    base64String = padStringWithChar(base64String, '=', 4, true);
     return base64String;
 }
 
@@ -110,22 +112,27 @@ size_t binToDecimal(const std::string binString) {
     return sum;
 }
 
-std::string fillBinWithZeroes(const std::string& binString, size_t byteSize, bool side) {
+// \param word: a string to be padded
+// \param c: the char to be used as padding
+// \param sizeToFixTo: the size to fix the string to
+// \param side: true if the padding should be added to the right side of the string, false if it should be added to the left side
+// \return the padded string
+std::string padStringWithChar(const std::string& word, char c, size_t sizeToFixTo, bool side) {
     using std::string;
 
-    size_t rest = binString.length() % byteSize;
+    size_t rest = word.length() % sizeToFixTo;
     if (!rest) {
-        return binString;
+        return word;
     }
 
-    size_t paddingSize = byteSize - rest;
+    size_t paddingSize = sizeToFixTo - rest;
 
     string result;
     if (side) {
-        result = binString + string(paddingSize, '0');
+        result = word + string(paddingSize, c);
     }
     else {
-        result = string(paddingSize, '0') + binString;
+        result = string(paddingSize, c) + word;
     }
 
     return result;
