@@ -19,12 +19,22 @@ std::string fillBinWithZeroes(const std::string& binString, size_t byteSize, boo
 bool isHexSymbol(char symbol);
 
 int main(int argc, const char* argv[]) {
-    if (argc != 2) {
-        std::cout << "Usage: " << argv[0] << " <hex string>\n";
+    std::string input;
+    if (argc < 2) {
+        input = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
+        std::cout << "You didn't pass any hex string as argument.\nBy default, this program will use the following string as input:\n";
+        std::cout << input;
+    }
+    else if (argc > 2) {
+        std::cout << "Usage: " << argv[0] << " [hex string]\n";
         return 1;
     }
+    else {
+        input = argv[1];
+    }
 
-    std::cout << hexToBase64(argv[1]) << '\n';
+    std::cout << "\n\nbase64 result:\n";
+    std::cout << hexToBase64(input) << '\n';
 
     return 0;
 }
