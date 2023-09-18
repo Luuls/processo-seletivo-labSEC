@@ -224,13 +224,13 @@ double evaluateText(const std::string& text) {
 }
 
 // \param hexString: a string to try to decrypt
-CryptoText decrypt_message(std::string hexString) {
+CryptoText decrypt_message(std::string binString) {
     // store all the possible candidates
     std::vector<CryptoText> textCandidates(256);
 
     // 1 byte = 8 bits -> 2^8 = 256 -> can only count from 0 to 255
     for (int keyCandidate = 0; keyCandidate < 256; keyCandidate++) {
-        std::string textCandidate = singleByteXor(hexToBin(hexString), keyCandidate);
+        std::string textCandidate = singleByteXor(binString, keyCandidate);
         textCandidate = binToASCII(textCandidate);
         textCandidates[keyCandidate] = { textCandidate, (unsigned char)keyCandidate, evaluateText(textCandidate) };
     }

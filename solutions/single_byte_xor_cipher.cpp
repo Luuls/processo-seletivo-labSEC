@@ -5,7 +5,8 @@
 
 int main() {
     std::string input = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736";
-
+    input = hexToBin(input);
+    
     CryptoText message = decrypt_message(input);
     
     std::cout << "\nDecrypted message: " << message.text << '\n';

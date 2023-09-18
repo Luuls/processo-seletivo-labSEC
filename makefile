@@ -5,7 +5,7 @@ SRC_DIR = solutions
 BUILD_DIR = build
 BIN_DIR = bin
 
-EXERCISES = fixed_xor hex_to_base64 single_byte_xor_cipher detect_single_character_xor
+EXERCISES = fixed_xor hex_to_base64 single_byte_xor_cipher detect_single_character_xor repeating_key_xor
 
 UTILITIES_SRC = utilities.cpp
 UTILITIES_OBJ = $(BUILD_DIR)/utilities.o

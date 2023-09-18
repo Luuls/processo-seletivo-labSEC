@@ -58,6 +58,6 @@ std::string singleByteXor(const std::string& binString, unsigned char key);
 
 double evaluateText(const std::string& text);
 
-CryptoText decrypt_message(std::string hexString);
+CryptoText decrypt_message(std::string binString);
 
 #endif //_UTILITIES_H_

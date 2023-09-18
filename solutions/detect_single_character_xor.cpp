@@ -9,7 +9,7 @@ CryptoText findEncryptedMessage(const std::string& filePath) {
     std::vector<std::string> messages = readFileLines(filePath);
     std::vector<CryptoText> decryptedMessages;
     for (const auto& message : messages) {
-        decryptedMessages.push_back(decrypt_message(message));
+        decryptedMessages.push_back(decrypt_message(hexToBin(message)));
     }
 
     // smallest score between the smallest scores
