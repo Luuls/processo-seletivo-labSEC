@@ -41,7 +41,7 @@ bool isHexSymbol(char symbol);
 // \param binString: a string containing only 0s and 1s
 // \param key: a char
 // \return a string containing the result of the XOR operation between the binary string and the key
-std::string singleByteXor(const std::string& binString, int key);
+std::string singleByteXor(const std::string& binString, unsigned char key);
 
 std::string singleByteXorHex(const std::string& hexString, unsigned char key);
 

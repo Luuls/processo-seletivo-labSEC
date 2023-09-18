@@ -126,7 +126,7 @@ bool isHexSymbol(char symbol) {
 
 // \param binString: a string containing only 0s and 1s
 // \param key: a char
-std::string singleByteXor(const std::string& binString, int key) {
+std::string singleByteXor(const std::string& binString, unsigned char key) {
     using std::string;
 
     string keyBinString = padStringWithChar(decimalToBin(key), '0', 8, false);
