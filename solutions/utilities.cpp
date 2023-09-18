@@ -5,11 +5,6 @@
 #include <algorithm>
 #include <cmath>
 
-// \param word: a string to be padded
-// \param c: the char to be used as padding
-// \param sizeToFixTo: the size to fix the string to
-// \param side: true if the padding should be added to the right side of the string, false if it should be added to the left side
-// \return the padded string
 std::string padStringWithChar(const std::string& word, char c, size_t sizeToFixTo, bool side) {
     using std::string;
 
@@ -31,8 +26,6 @@ std::string padStringWithChar(const std::string& word, char c, size_t sizeToFixT
     return result;
 }
 
-// \param hexString: a string containing only hexadecimal symbols
-// \return a string containing the binary representation of the hexadecimal string correctly padded with 0s
 std::string hexToBin(const std::string& hexString) {
     using std::map;
     using std::string;
@@ -92,12 +85,9 @@ std::string binToASCII(const std::string& binString) {
         ASCIIString += (char) binToDecimal(binByte);
     }
 
-    // std::cout << ASCIIString << '\n';
     return ASCIIString;
 }
 
-// \param decimalNumber: a decimal number
-// \return a string containing the binary representation of the decimal number
 std::string decimalToBin(unsigned int decimalNumber) {
     using std::string;
 
@@ -108,7 +98,7 @@ std::string decimalToBin(unsigned int decimalNumber) {
     string binString;
     while (decimalNumber > 0) {
         unsigned int rest = decimalNumber % 2;
-        binString += (char) rest;
+        binString += '0' + rest;
 
         decimalNumber /= 2;
     }
@@ -117,8 +107,6 @@ std::string decimalToBin(unsigned int decimalNumber) {
     return binString;
 }
 
-// \param binString: a string containing only 0s and 1s
-// \return the decimal value of the binary string
 unsigned int binToDecimal(const std::string binString) {
     size_t stringLength = binString.length();
     size_t sum = 0;
@@ -131,14 +119,14 @@ unsigned int binToDecimal(const std::string binString) {
     return sum;
 }
 
-// \param symbol: a char
-// \return true if the char is a hexadecimal symbol, false otherwise
 bool isHexSymbol(char symbol) {
     symbol = toupper(symbol);
     return ('0' <= symbol && symbol <= '9') || ('A' <= symbol && symbol <= 'F');
 }
 
-std::string singleByteXor(const std::string& binString, unsigned char key) {
+// \param binString: a string containing only 0s and 1s
+// \param key: a char
+std::string singleByteXor(const std::string& binString, int key) {
     using std::string;
 
     string keyBinString = padStringWithChar(decimalToBin(key), '0', 8, false);
@@ -148,7 +136,49 @@ std::string singleByteXor(const std::string& binString, unsigned char key) {
         char keyChar = keyBinString[i % 8];
         result += binString[i] == keyChar ? '0' : '1';
     }
-
-    result = binToHex(result);
+    
     return result;
+}
+
+double evaluateText(const std::string& text) {
+    using std::map;
+
+    // Tabela de frequência obtida em
+    // https://pi.math.cornell.edu/~mec/2003-2004/cryptography/subs/frequencies.html
+
+    map<char, double> englishLetterFrequency = {
+        {'e', 12.02}, {'t', 9.10}, {'a', 8.12}, {'o', 7.68},
+        {'i', 7.31}, {'n', 6.95}, {'s', 6.28}, {'r', 6.02},
+        {'h', 5.92}, {'d', 4.32}, {'l', 3.98}, {'u', 2.88},
+        {'c', 2.71}, {'m', 2.61}, {'f', 2.30}, {'y', 2.11},
+        {'w', 2.09}, {'g', 2.02}, {'p', 1.82}, {'b', 1.49},
+        {'v', 1.11}, {'k', 0.69}, {'x', 0.17}, {'q', 0.11},
+        {'j', 0.10}, {'z', 0.07}, {' ', 13.29}
+    };
+    
+    // map para não precisar percorrer a string uma vez por letra
+    map<char, double> textLettersCount;
+
+    // todas as letras da tabela de frequência devem estar no map
+    // e começam com frequência 0
+    for (auto [letter, frequency] : englishLetterFrequency) {
+        textLettersCount[letter] = 0;
+    }
+
+    // conta a frequência de cada letra no texto se ela estiver na tabela de frequência
+    for (auto c : text) {
+        if (englishLetterFrequency.find(c) != englishLetterFrequency.end()) {
+            textLettersCount[c]++;
+        }
+    }
+
+    // acumula o erro entre a frequência de cada letra no texto e a frequência esperada
+    double sum = 0;
+    for (auto [letter, count] : textLettersCount) {
+        double textCurrentLetterFrequency = count / text.length();
+        double error = std::abs(textCurrentLetterFrequency - englishLetterFrequency[letter]);
+        sum += error;
+    }
+
+    return sum;
 }
