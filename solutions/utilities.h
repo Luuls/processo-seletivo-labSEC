@@ -2,12 +2,19 @@
 #define _UTILITIES_H_
 
 #include <string>
+#include <vector>
 
-struct EncryptedText {
+// a struct to hold the result of a cryptographic message
+struct CryptoText {
     std::string text;
+    // the key used to decrypt/encrypt the message
     unsigned char key;
     double score;
 };
+
+// \param filePath: the path to the file to be read
+// \return a vector of strings, each string representing a line from the file
+std::vector<std::string> readFileLines(const std::string& filePath);
 
 // \param word: a string to be padded
 // \param c: the char to be used as padding
@@ -45,8 +52,8 @@ bool isHexSymbol(char symbol);
 // \return a string containing the result of the XOR operation between the binary string and the key
 std::string singleByteXor(const std::string& binString, unsigned char key);
 
-std::string singleByteXorHex(const std::string& hexString, unsigned char key);
-
 double evaluateText(const std::string& text);
+
+CryptoText decrypt_message(std::string hexString);
 
 #endif //_UTILITIES_H_

@@ -1,9 +1,20 @@
 #include "utilities.h"
 
 #include <iostream>
+#include <fstream>
+#include <iterator>
+#include <vector>
+#include <string>
 #include <map>
 #include <algorithm>
 #include <cmath>
+
+std::vector<std::string> readFileLines(const std::string& filePath) {
+    std::ifstream file(filePath);
+    std::istream_iterator<std::string> start(file), end;
+    std::vector<std::string> lines(start, end);
+    return lines;
+}
 
 std::string padStringWithChar(const std::string& word, char c, size_t sizeToFixTo, bool side) {
     using std::string;
@@ -157,6 +168,9 @@ double evaluateText(const std::string& text) {
     // frequency table gotten from:
     // https://pi.math.cornell.edu/~mec/2003-2004/cryptography/subs/frequencies.html
 
+    // ps: the frequency of ' ' was taken from multiple sources.
+    // I couldn't find a reliable source for it
+
     map<char, double> englishLetterFrequency = {
         {'e', 12.02}, {'t', 9.10}, {'a', 8.12}, {'o', 7.68},
         {'i', 7.31}, {'n', 6.95}, {'s', 6.28}, {'r', 6.02},
@@ -192,4 +206,24 @@ double evaluateText(const std::string& text) {
     }
 
     return sum;
+}
+
+// \param hexString: a string to try to decrypt
+CryptoText decrypt_message(std::string hexString) {
+    // store all the possible candidates
+    std::vector<CryptoText> textCandidates(256);
+
+    // 1 byte = 8 bits -> 2^8 = 256 -> can only count from 0 to 255
+    for (int keyCandidate = 0; keyCandidate < 256; keyCandidate++) {
+        std::string textCandidate = singleByteXor(hexToBin(hexString), keyCandidate);
+        textCandidate = binToASCII(textCandidate);
+        textCandidates[keyCandidate] = { textCandidate, (unsigned char)keyCandidate, evaluateText(textCandidate) };
+    }
+
+    CryptoText bestCandidate = *std::min_element(textCandidates.begin(), textCandidates.end(),
+        [](const CryptoText& a, const CryptoText& b) {
+            return a.score < b.score;
+    });
+
+    return bestCandidate;
 }
