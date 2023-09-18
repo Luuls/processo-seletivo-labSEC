@@ -156,10 +156,31 @@ unsigned int binToDecimal(const std::string binString) {
     return sum;
 }
 
-
 bool isHexSymbol(char symbol) {
     symbol = toupper(symbol);
     return ('0' <= symbol && symbol <= '9') || ('A' <= symbol && symbol <= 'F');
+}
+
+std::string base64ToHex(const std::string& base64String) {
+    using std::string;
+    using std::vector;
+
+    string base64Symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    
+    // access time faster than search through the string
+    std::map<char, int> base64SymbolToDecimal;
+    for (size_t i = 0; i < base64Symbols.length(); i++) {
+        base64SymbolToDecimal[base64Symbols[i]] = i;
+    }
+
+    string binString;
+    for (auto symbol : base64String) {
+        size_t symbolIndex = base64SymbolToDecimal[symbol];
+        binString += padStringWithChar(decimalToBin(symbolIndex), '0', 6, false);
+    }
+
+    string hexString = binToHex(binString);
+    return hexString;
 }
 
 std::string singleByteXor(const std::string& binString, unsigned char key) {
@@ -174,6 +195,17 @@ std::string singleByteXor(const std::string& binString, unsigned char key) {
         result += binString[i] == keyChar ? '0' : '1';
     }
     
+    return result;
+}
+
+std::string repeating_key_xor(const std::string& binString, const std::string& key) {
+    std::string result;
+
+    std::string paddedString = padStringWithChar(binString, '0', 8, false);
+    for (size_t i = 0; i < paddedString.length(); i += 8) {
+        result += singleByteXor(paddedString.substr(i, 8), key[(i / 8) % key.length()]);
+    }
+
     return result;
 }
 

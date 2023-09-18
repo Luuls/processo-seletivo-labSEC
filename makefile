@@ -5,7 +5,9 @@ SRC_DIR = solutions
 BUILD_DIR = build
 BIN_DIR = bin
 
-EXERCISES = fixed_xor hex_to_base64 single_byte_xor_cipher detect_single_character_xor repeating_key_xor
+EXERCISES_SRC = $(wildcard $(SRC_DIR)/*.cpp)
+EXERCISES_WITH_UTILITIES = $(patsubst $(SRC_DIR)/%.cpp, %, $(EXERCISES_SRC))
+EXERCISES = $(filter-out utilities, $(EXERCISES_WITH_UTILITIES))
 
 UTILITIES_SRC = utilities.cpp
 UTILITIES_OBJ = $(BUILD_DIR)/utilities.o
@@ -22,7 +24,11 @@ $(UTILITIES_OBJ): $(SRC_DIR)/$(UTILITIES_SRC)
 	@mkdir -p $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
+check:
+	@echo $(EXERCISES_SRC)
+	@echo $(EXERCISES)
+	
 clean:
 	rm -rf $(BIN_DIR)/* $(BUILD_DIR)/*
 
-.PHONY: all clean
+.PHONY: all clean check

@@ -51,10 +51,14 @@ unsigned int binToDecimal(const std::string binString);
 // \return true if the char is a hexadecimal symbol, false otherwise
 bool isHexSymbol(char symbol);
 
+std::string base64ToHex(const std::string& base64String);
+
 // \param binString: a string containing only 0s and 1s
 // \param key: a char
 // \return a string containing the result of the XOR operation between the binary string and the key
 std::string singleByteXor(const std::string& binString, unsigned char key);
+
+std::string repeating_key_xor(const std::string& binString, const std::string& key);
 
 double evaluateText(const std::string& text);
 
