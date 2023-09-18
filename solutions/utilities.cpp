@@ -9,6 +9,8 @@
 #include <algorithm>
 #include <cmath>
 
+//TODO: pollish the 'using' inside the functions
+
 std::vector<std::string> readFileLines(const std::string& filePath) {
     std::ifstream file(filePath);
     std::istream_iterator<std::string> start(file), end;
@@ -91,6 +93,7 @@ std::string binToHex(const std::string& binString) {
         hexString = hexString.substr(firstNonZero);
     }
 
+    hexString = padStringWithChar(hexString, '0', 2, false);
     return hexString;
 }
 
@@ -108,6 +111,18 @@ std::string binToASCII(const std::string& binString) {
 
     return ASCIIString;
 }
+
+std::string ASCIIToBin(const std::string& ASCIIString) {
+    using std::string;
+
+    string binString;
+    for (auto c : ASCIIString) {
+        binString += padStringWithChar(decimalToBin(c), '0', 8, false);
+    }
+
+    return binString;
+}
+
 
 std::string decimalToBin(unsigned int decimalNumber) {
     using std::string;
@@ -220,6 +235,8 @@ CryptoText decrypt_message(std::string hexString) {
         textCandidates[keyCandidate] = { textCandidate, (unsigned char)keyCandidate, evaluateText(textCandidate) };
     }
 
+    // get the smallest score between the candidates
+    // (smaller error accumulation)
     CryptoText bestCandidate = *std::min_element(textCandidates.begin(), textCandidates.end(),
         [](const CryptoText& a, const CryptoText& b) {
             return a.score < b.score;

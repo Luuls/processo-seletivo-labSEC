@@ -35,6 +35,10 @@ std::string binToHex(const std::string& binString);
 // \return a string containing the ASCII representation of the binary string
 std::string binToASCII(const std::string& binString);
 
+// \param ASCIIString: a string containing only ASCII symbols
+// \return a string containing the binary representation of the ASCII string
+std::string ASCIIToBin(const std::string& ASCIIString);
+
 // \param decimalNumber: a decimal number
 // \return a string containing the binary representation of the decimal number
 std::string decimalToBin(unsigned int decimalValue);
