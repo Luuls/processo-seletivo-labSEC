@@ -2,10 +2,10 @@
 #include <string>
 #include "utilities.h"
 
-std::string fixed_xor(const std::string& a, const std::string& b) {
+std::string fixed_xor(const std::string& binA, const std::string& binB) {
     std::string result("");
-    for (size_t i = 0; i < a.length(); i++) {
-        result += (a[i] == b[i]) ? '0' : '1';
+    for (size_t i = 0; i < binA.length(); i++) {
+        result += (binA[i] == binB[i]) ? '0' : '1';
     }
 
     return result;

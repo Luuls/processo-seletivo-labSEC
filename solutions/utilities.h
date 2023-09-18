@@ -15,4 +15,8 @@ unsigned int binToDecimal(const std::string binString);
 
 bool isHexSymbol(char symbol);
 
+std::string singleByteXor(const std::string& binString, unsigned char key);
+
+std::string singleByteXorHex(const std::string& hexString, unsigned char key);
+
 #endif //_UTILITIES_H_
