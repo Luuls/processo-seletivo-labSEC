@@ -179,7 +179,7 @@ std::string base64ToHex(const std::string& base64String) {
         binString += padStringWithChar(decimalToBin(symbolIndex), '0', 6, false);
     }
 
-    string hexString = binToHex(binString);
+    string hexString = padStringWithChar(binToHex(binString), '0', 2, false);
     return hexString;
 }
 
