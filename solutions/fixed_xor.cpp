@@ -3,7 +3,7 @@
 #include "utilities.h"
 
 std::string fixed_xor(const std::string& binA, const std::string& binB) {
-    std::string result("");
+    std::string result;
     for (size_t i = 0; i < binA.length(); i++) {
         result += (binA[i] == binB[i]) ? '0' : '1';
     }

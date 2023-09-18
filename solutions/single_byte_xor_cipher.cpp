@@ -4,18 +4,18 @@
 #include <vector>
 
 EncryptedText decrypt_message(std::string hexString) {
-    // armazenar todos os candidatos a mensagem criptografada
+    // store all the possible candidates
     std::vector<EncryptedText> textCandidates(256);
 
-    // 1 byte = 8 bits -> 2^8 = 256 possibilidades
+    // 1 byte = 8 bits -> 2^8 = 256 possibilities
     for (int keyCandidate = 0; keyCandidate < 256; keyCandidate++) {
         std::string textCandidate = singleByteXor(hexToBin(hexString), keyCandidate);
         textCandidate = binToASCII(textCandidate);
         textCandidates[keyCandidate] = {textCandidate, (unsigned char) keyCandidate, evaluateText(textCandidate)};
     }
 
-    // encontrar o candidato com a menor pontuação
-    // (menor acúmulo de erros)
+    // find the candidate with smallest score
+    // (smaller error acumulation)
     EncryptedText bestCandidate = textCandidates[0];
     for (size_t i = 1; i < textCandidates.size(); i++) {
         if (textCandidates[i].score < bestCandidate.score) {

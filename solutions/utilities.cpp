@@ -8,17 +8,23 @@
 std::string padStringWithChar(const std::string& word, char c, size_t sizeToFixTo, bool side) {
     using std::string;
 
+    if (sizeToFixTo == 0) {
+        return word;
+    }
+
     size_t rest = word.length() % sizeToFixTo;
-    if (!rest) {
+    if (rest == 0) {
         return word;
     }
 
     size_t paddingSize = sizeToFixTo - rest;
 
     string result;
+    // true -> right side
     if (side) {
         result = word + string(paddingSize, c);
     }
+    // false -> left side
     else {
         result = string(paddingSize, c) + word;
     }
@@ -30,7 +36,7 @@ std::string hexToBin(const std::string& hexString) {
     using std::map;
     using std::string;
 
-    // uma tabela de conversão de símbolo hexadecimal para um binário de 4 bits
+    // conversion table
     static map<char, string> hexSymbolToBinNibble{
         {'0', "0000"}, {'1', "0001"}, {'2', "0010"}, {'3', "0011"},
         {'4', "0100"}, {'5', "0101"}, {'6', "0110"}, {'7', "0111"},
@@ -52,7 +58,7 @@ std::string binToHex(const std::string& binString) {
     using std::map;
     using std::string;
 
-    // uma tabela de conversão de um binário de 4 bits para um símbolo hexadecimal
+    // conversion table
     static map<string, char> binNibbleToHexSymbol{
         {"0000", '0'}, {"0001", '1'}, {"0010", '2'}, {"0011", '3'},
         {"0100", '4'}, {"0101", '5'}, {"0110", '6'}, {"0111", '7'},
@@ -60,9 +66,11 @@ std::string binToHex(const std::string& binString) {
         {"1100", 'c'}, {"1101", 'd'}, {"1110", 'e'}, {"1111", 'f'}
     };
 
+    // just to make sure, fix the size of the string to a multiple of 4 bits
     string fixedBinString = padStringWithChar(binString, '0', 4, false);
     string hexString;
     for (size_t i = 0; i < fixedBinString.length(); i += 4) {
+        // read the bin string 1 nibble at a time
         string binNibble = fixedBinString.substr(i, 4);
         hexString += binNibbleToHexSymbol[binNibble];
     }
@@ -78,9 +86,11 @@ std::string binToHex(const std::string& binString) {
 std::string binToASCII(const std::string& binString) {
     using std::string;
 
+    // just to make sure, fix the size of the string to a multiple of 8 bits
     string fixedBinString = padStringWithChar(binString, '0', 8, false);
     string ASCIIString;
     for (size_t i = 0; i < fixedBinString.length(); i += 8) {
+        // read the bin string 1 byte at a time
         string binByte = fixedBinString.substr(i, 8);
         ASCIIString += (char) binToDecimal(binByte);
     }
@@ -97,6 +107,7 @@ std::string decimalToBin(unsigned int decimalNumber) {
 
     string binString;
     while (decimalNumber > 0) {
+        // method of division by 2
         unsigned int rest = decimalNumber % 2;
         binString += '0' + rest;
 
@@ -111,7 +122,7 @@ unsigned int binToDecimal(const std::string binString) {
     size_t stringLength = binString.length();
     size_t sum = 0;
     for (size_t i = 0; i != stringLength; i++) {
-        // converte o código ASCII do char para o valor que o char representa em int
+        // converts the char to the decimal value that it represents
         bool binValue = binString[i] - '0';
         sum += binValue * int(std::pow(2, stringLength - 1 - i));
     }
@@ -119,16 +130,16 @@ unsigned int binToDecimal(const std::string binString) {
     return sum;
 }
 
+
 bool isHexSymbol(char symbol) {
     symbol = toupper(symbol);
     return ('0' <= symbol && symbol <= '9') || ('A' <= symbol && symbol <= 'F');
 }
 
-// \param binString: a string containing only 0s and 1s
-// \param key: a char
 std::string singleByteXor(const std::string& binString, unsigned char key) {
     using std::string;
 
+    // just to make sure, fix the size of the string to a multiple of 8 bits
     string keyBinString = padStringWithChar(decimalToBin(key), '0', 8, false);
 
     string result;
@@ -143,7 +154,7 @@ std::string singleByteXor(const std::string& binString, unsigned char key) {
 double evaluateText(const std::string& text) {
     using std::map;
 
-    // Tabela de frequência obtida em
+    // frequency table gotten from:
     // https://pi.math.cornell.edu/~mec/2003-2004/cryptography/subs/frequencies.html
 
     map<char, double> englishLetterFrequency = {
@@ -156,23 +167,23 @@ double evaluateText(const std::string& text) {
         {'j', 0.10}, {'z', 0.07}, {' ', 13.29}
     };
     
-    // map para não precisar percorrer a string uma vez por letra
+    // create a map so that we don't have to iterate over the text every time we want to count a letter
     map<char, double> textLettersCount;
 
-    // todas as letras da tabela de frequência devem estar no map
-    // e começam com frequência 0
+    // every letter from the frequency table must be in the map
+    // and start with a frequency of 0
     for (auto [letter, frequency] : englishLetterFrequency) {
         textLettersCount[letter] = 0;
     }
 
-    // conta a frequência de cada letra no texto se ela estiver na tabela de frequência
+    // counts the frequency of every letter in the text if its in the frequency table
     for (auto c : text) {
         if (englishLetterFrequency.find(c) != englishLetterFrequency.end()) {
             textLettersCount[c]++;
         }
     }
 
-    // acumula o erro entre a frequência de cada letra no texto e a frequência esperada
+    // accumulates the error between the text letter frequency and the english letter frequency
     double sum = 0;
     for (auto [letter, count] : textLettersCount) {
         double textCurrentLetterFrequency = count / text.length();

@@ -20,6 +20,8 @@ std::string padStringWithChar(const std::string& word, char c, size_t sizeToFixT
 // \return a string containing the binary representation of the hexadecimal string correctly padded with 0s
 std::string hexToBin(const std::string& hexString);
 
+// \param binString: a string containing only 0s and 1s
+// \return a string containing the hexadecimal representation of the binary string
 std::string binToHex(const std::string& binString);
 
 // \param binString: a string containing only 0s and 1s

@@ -11,7 +11,7 @@
 // \param hexString: string of hexadecimal symbols
 // \return converted hexadecimal string to base64 string
 std::string hexToBase64(const std::string& hexString) {
-    // algoritmo baseado em 
+    // algorithm based on: 
     // https://pt.wikipedia.org/wiki/Base64
 
     using std::string;
@@ -20,6 +20,7 @@ std::string hexToBase64(const std::string& hexString) {
     string binString = hexToBin(hexString);
     binString = padStringWithChar(binString, '0', 6, true);
 
+    // split the binary string into 6-bit blocks
     vector<string> sixBitBlocks(std::ceil((float)binString.length() / 6));
     for (size_t i = 0; i < binString.length(); i += 6) {
         sixBitBlocks[i / 6] = binString.substr(i, 6);
