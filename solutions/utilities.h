@@ -9,6 +9,8 @@ std::string hexToBin(const std::string& hexString);
 
 std::string binToHex(const std::string& binString);
 
+std::string binToASCII(const std::string& binString);
+
 std::string decimalToBin(unsigned int decimalValue);
 
 unsigned int binToDecimal(const std::string binString);

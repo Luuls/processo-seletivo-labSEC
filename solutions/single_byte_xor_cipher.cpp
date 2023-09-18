@@ -1,15 +1,15 @@
 #include "utilities.h"
 
 #include <iostream>
+#include <vector>
 
 std::string decrypt_message(std::string hexString) {
+    std::vector<std::string> textCandidates(256);
     for (int keyCandidate = 0; keyCandidate < 256; keyCandidate++) {
         std::string textCandidate = singleByteXor(hexToBin(hexString), keyCandidate);
         textCandidate = hexToBin(textCandidate);
-        for (size_t i = 0; i < textCandidate.length(); i += 8) {
-            std::cout << (char) binToDecimal(textCandidate.substr(i, 8));
-        }
-        std::cout << std::endl;
+        textCandidate = binToASCII(textCandidate);
+        textCandidates[keyCandidate] = textCandidate;
     }
 
     return "";

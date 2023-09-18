@@ -82,6 +82,20 @@ std::string binToHex(const std::string& binString) {
     return hexString;
 }
 
+std::string binToASCII(const std::string& binString) {
+    using std::string;
+
+    string fixedBinString = padStringWithChar(binString, '0', 8, false);
+    string ASCIIString;
+    for (size_t i = 0; i < fixedBinString.length(); i += 8) {
+        string binByte = fixedBinString.substr(i, 8);
+        ASCIIString += (char) binToDecimal(binByte);
+    }
+
+    // std::cout << ASCIIString << '\n';
+    return ASCIIString;
+}
+
 // \param decimalNumber: a decimal number
 // \return a string containing the binary representation of the decimal number
 std::string decimalToBin(unsigned int decimalNumber) {
@@ -93,8 +107,8 @@ std::string decimalToBin(unsigned int decimalNumber) {
 
     string binString;
     while (decimalNumber > 0) {
-        int rest = decimalNumber % 2;
-        binString += '0' + rest;
+        unsigned int rest = decimalNumber % 2;
+        binString += (char) rest;
 
         decimalNumber /= 2;
     }
@@ -132,7 +146,7 @@ std::string singleByteXor(const std::string& binString, unsigned char key) {
     string result;
     for (size_t i = 0; i < binString.length(); i++) {
         char keyChar = keyBinString[i % 8];
-        result += binString[i] == keyChar? '0' : '1';
+        result += binString[i] == keyChar ? '0' : '1';
     }
 
     result = binToHex(result);
