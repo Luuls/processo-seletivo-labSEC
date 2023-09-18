@@ -21,7 +21,22 @@ CryptoText findEncryptedMessage(const std::string& filePath) {
     return bestCandidate;
 }
 
-int main() {
-    std::cout << findEncryptedMessage("./data/4.txt").text << '\n';
+int main(int argc, char* argv[]) {
+    std::string input;
+    if (argc < 2) {
+        std::cout << "You didn't pass any filepath as argument.\nBy default, this program will use the following file as input:\n";
+        input = "./data/4.txt";
+        std::cout << input;
+        std::cout << "\n\nbest result:\n";
+    }
+    else if (argc > 2) {
+        std::cout << "Usage: " << argv[0] << " [filepath]\n";
+        return 1;
+    }
+    else {
+        input = argv[1];
+    }
+
+    std::cout << findEncryptedMessage(input).text << '\n';
     return 0;
 }
