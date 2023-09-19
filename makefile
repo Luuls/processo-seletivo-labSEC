@@ -24,11 +24,7 @@ $(UTILITIES_OBJ): $(SRC_DIR)/$(UTILITIES_SRC)
 	@mkdir -p $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-check:
-	@echo $(EXERCISES_SRC)
-	@echo $(EXERCISES)
-	
 clean:
 	rm -rf $(BIN_DIR)/* $(BUILD_DIR)/*
 
-.PHONY: all clean check
+.PHONY: all clean
