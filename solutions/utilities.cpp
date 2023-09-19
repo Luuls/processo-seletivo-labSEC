@@ -271,7 +271,7 @@ CryptoText<unsigned char> decrypt_message(std::string binString) {
     // (smaller error accumulation)
     CryptoText bestCandidate = *std::min_element(textCandidates.begin(), textCandidates.end(),
         [](const CryptoText<unsigned char>& a, const CryptoText<unsigned char>& b) {
-            return a.score < b.score;
+            return a.evaluation < b.evaluation;
     });
 
     return bestCandidate;

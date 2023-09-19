@@ -15,7 +15,7 @@ CryptoText<unsigned char> findEncryptedMessage(const std::string& filePath) {
     // smallest score between the smallest scores
     CryptoText<unsigned char> bestCandidate = *std::min_element(decryptedMessages.begin(), decryptedMessages.end(),
         [](const CryptoText<unsigned char>& a, const CryptoText<unsigned char>& b) {
-            return a.score < b.score;
+            return a.evaluation < b.evaluation;
     });
 
     return bestCandidate;

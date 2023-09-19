@@ -11,7 +11,7 @@ int main() {
     
     std::cout << "\nDecrypted message: " << message.text << '\n';
     std::cout << "Key used to encrypt: " << message.key << '\n';
-    std::cout << "Evaluated score: " << message.score << '\n';
+    std::cout << "Evaluated score: " << message.evaluation << '\n';
     
     return 0;
 }

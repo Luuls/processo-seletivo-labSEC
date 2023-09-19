@@ -5,12 +5,12 @@
 #include <vector>
 
 // a struct to hold the result of a cryptographic message
-template<typename KeyT = unsigned char>
+template<typename KeyT>
 struct CryptoText {
     std::string text;
     // the key used to decrypt/encrypt the message
     KeyT key;
-    double score;
+    double evaluation;
 };
 
 // \param filePath: the path to the file to be read
