@@ -24,7 +24,14 @@ $(UTILITIES_OBJ): $(SRC_DIR)/$(UTILITIES_SRC)
 	@mkdir -p $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
+run:
+	@for exercise in $(EXERCISES); do \
+		echo "\n[[MAKE]] RUNNING $$exercise"; \
+		./$(BIN_DIR)/$$exercise; \
+		echo; \
+	done
+
 clean:
 	rm -rf $(BIN_DIR)/* $(BUILD_DIR)/*
 
-.PHONY: all clean
+.PHONY: all clean run
