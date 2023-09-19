@@ -5,10 +5,11 @@
 #include <vector>
 
 // a struct to hold the result of a cryptographic message
+template<typename KeyT = unsigned char>
 struct CryptoText {
     std::string text;
     // the key used to decrypt/encrypt the message
-    unsigned char key;
+    KeyT key;
     double score;
 };
 
@@ -62,6 +63,8 @@ std::string repeating_key_xor(const std::string& binString, const std::string& k
 
 double evaluateText(const std::string& text);
 
-CryptoText decrypt_message(std::string binString);
+CryptoText<unsigned char> decrypt_message(std::string binString);
+
+int hammingDistance(const std::string& binA, const std::string& binB);
 
 #endif //_UTILITIES_H_

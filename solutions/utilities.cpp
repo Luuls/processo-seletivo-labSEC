@@ -256,9 +256,9 @@ double evaluateText(const std::string& text) {
 }
 
 // \param hexString: a string to try to decrypt
-CryptoText decrypt_message(std::string binString) {
+CryptoText<unsigned char> decrypt_message(std::string binString) {
     // store all the possible candidates
-    std::vector<CryptoText> textCandidates(256);
+    std::vector<CryptoText<unsigned char>> textCandidates(256);
 
     // 1 byte = 8 bits -> 2^8 = 256 -> can only count from 0 to 255
     for (int keyCandidate = 0; keyCandidate < 256; keyCandidate++) {
@@ -270,9 +270,24 @@ CryptoText decrypt_message(std::string binString) {
     // get the smallest score between the candidates
     // (smaller error accumulation)
     CryptoText bestCandidate = *std::min_element(textCandidates.begin(), textCandidates.end(),
-        [](const CryptoText& a, const CryptoText& b) {
+        [](const CryptoText<unsigned char>& a, const CryptoText<unsigned char>& b) {
             return a.score < b.score;
     });
 
     return bestCandidate;
+}
+
+int hammingDistance(const std::string& binA, const std::string& binB) {
+    if (binA.length() != binB.length()) {
+        return -1;
+    }
+
+    int differencesCount = 0;
+    for (size_t i = 0; i < binA.length(); i++) {
+        if (binA[i] != binB[i]) {
+            differencesCount++;
+        }
+    }
+
+    return differencesCount;
 }
