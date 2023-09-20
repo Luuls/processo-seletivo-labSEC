@@ -61,14 +61,26 @@ std::string base64ToBin(const std::string& base64String);
 // \return a string containing the result of the XOR operation between the binary string and the key
 std::string singleByteXor(const std::string& binString, unsigned char key);
 
+// \param binString: a string containing only 0s and 1s
+// \param key: a string
+// \return a string containing the result of the XOR operation between the binary string and the key
 std::string repeating_key_xor(const std::string& binString, const std::string& key);
 
+// \param binString: a string containing only 0s and 1s
+// \return the evaluation of the string of how close it is to english text
 double evaluateText(const std::string& text);
 
+// \param binString: a string containing only 0s and 1s
+// \return a struct containing the best result of the decryption of the message and the key used to decrypt it
 CryptoText<unsigned char> decrypt_message(std::string binString);
 
+// \param binA: a string containing only 0s and 1s
+// \param binB: a string containing only 0s and 1s
+// \return the hamming distance between the two binary strings
 int hammingDistance(const std::string& binA, const std::string& binB);
 
+// \param matrix: a matrix of strings
+// \return the transpose of the matrix
 std::vector<std::vector<std::string>> transposeMatrix(const std::vector<std::vector<std::string>>& matrix);
 
 #endif //_UTILITIES_H_

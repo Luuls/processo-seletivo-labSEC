@@ -19,7 +19,7 @@ std::string break_repeating_key_xor(const std::string& binString) {
     
     // compute the Hamming distance for all key sizes between 2 and 40
     // utilizing the first four blocks of the string
-    // and taking the average of the two hamming distances
+    // and taking the average of the hamming distances
     vector<KeySizeWithDistance> editDistances;
     for (size_t keySize = 2; keySize < 41; keySize++) {
         double sum = 0.0;
@@ -45,11 +45,13 @@ std::string break_repeating_key_xor(const std::string& binString) {
     });
 
     vector<string> keysUsed;
+    // for each one of the best key sizes
     for (auto [keySize, editDistance] : lowestEditDistanceKeySizes) {
         vector<vector<string>> blocks(
             std::ceil(binString.length() / (float)keySize), vector<string>(keySize)
         );
 
+        // split the string into blocks of size keySize
         for (size_t i = 0; i < binString.length(); i += 8 * keySize) {
             for (size_t j = 0; j < 8 * keySize; j += 8) {
                 if (i + j >= binString.length()) {
@@ -59,52 +61,29 @@ std::string break_repeating_key_xor(const std::string& binString) {
             }
         }
 
+        // transpose the blocks to xor them with the same key
         vector<vector<string>> transposedBlocks = transposeMatrix(blocks);
 
         string keyUsed;
         for (auto block : transposedBlocks) {
             string blockString = std::accumulate(block.begin(), block.end(), string(""));
             CryptoText<unsigned char> bestCandidate = decrypt_message(blockString);
+            // each key here is a byte of the key used to encrypt the original message
             keyUsed += bestCandidate.key;
         }
 
         keysUsed.push_back(keyUsed);
-        // vector<string> transposedBlocks(keySize);
-        // for (size_t i = 0; i < blocks.size(); i++) {
-        //     for (size_t j = 0; j < keySize; j++) {
-        //         if (j > blocks[i].length()) {
-        //             // to escape the outer loop
-        //             goto exit;
-        //             break;
-        //         }
-                    
-        //         transposedBlocks[j] += blocks[i][j];
-        //     }
-        // }
-        // exit:
-
-        // string keyUsed;
-        // for (auto block : transposedBlocks) {
-        //     std::cout << block << '\n';
-        //     CryptoText<unsigned char> bestCandidate = decrypt_message(block);
-        //     std::cout << bestCandidate.key;
-        //     keyUsed += bestCandidate.key;
-        // }
-        // std::cout << "\n\n";
-
-        // keysUsed.push_back(keyUsed);
     }
     
+    // for each key candidate, decrypt the message and evaluate it
     vector<CryptoText<string>> results;
     for (auto key : keysUsed) {
         string text = binToASCII(repeating_key_xor(binString, key));
         double score = evaluateText(text);
         results.push_back({ text, key, score });
-        
-        // std::cout << text << '\n';
-        
     }
 
+    // get the best result
     CryptoText<string> bestResult = *std::min_element(results.begin(), results.end(),
         [](const CryptoText<string>& a, const CryptoText<string>& b) {
             return a.evaluation < b.evaluation;

@@ -156,6 +156,7 @@ unsigned int binToDecimal(const std::string binString) {
     return sum;
 }
 
+
 bool isHexSymbol(char symbol) {
     symbol = toupper(symbol);
     return ('0' <= symbol && symbol <= '9') || ('A' <= symbol && symbol <= 'F');
