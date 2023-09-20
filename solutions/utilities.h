@@ -54,6 +54,8 @@ bool isHexSymbol(char symbol);
 
 std::string base64ToHex(const std::string& base64String);
 
+std::string base64ToBin(const std::string& base64String);
+
 // \param binString: a string containing only 0s and 1s
 // \param key: a char
 // \return a string containing the result of the XOR operation between the binary string and the key

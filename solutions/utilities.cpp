@@ -183,6 +183,10 @@ std::string base64ToHex(const std::string& base64String) {
     return hexString;
 }
 
+std::string base64ToBin(const std::string& base64String) {
+    return hexToBin(base64ToHex(base64String));
+}
+
 std::string singleByteXor(const std::string& binString, unsigned char key) {
     using std::string;
 
