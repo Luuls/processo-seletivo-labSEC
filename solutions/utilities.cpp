@@ -295,3 +295,23 @@ int hammingDistance(const std::string& binA, const std::string& binB) {
 
     return differencesCount;
 }
+
+std::vector<std::vector<std::string>> transposeMatrix(const std::vector<std::vector<std::string>>& matrix) {
+    using std::vector;
+    using std::string;
+
+    size_t rows = matrix[0].size();
+    size_t columns = matrix.size();
+    vector<vector<string>> transposedMatrix(rows, vector<string>(columns));
+    for (size_t i = 0; i < columns; i++) {
+        for (size_t j = 0; j < rows; j++) {
+            if (j > matrix[i].size()) {
+                return transposedMatrix;
+            }
+
+            transposedMatrix[j][i] = matrix[i][j];
+        }
+    }
+
+    return transposedMatrix;
+}

@@ -11,9 +11,10 @@ std::string break_repeating_key_xor(const std::string& binString) {
     using std::vector;
     using std::string;
 
+    // local struct to hold the key size and the average hamming distance
     struct KeySizeWithDistance {
         size_t keySize;
-        double distance;
+        double averageEditDistance;
     };
     
     // compute the Hamming distance for all key sizes between 2 and 40
@@ -40,7 +41,7 @@ std::string break_repeating_key_xor(const std::string& binString) {
         lowestEditDistanceKeySizes.begin(),
         lowestEditDistanceKeySizes.end(),
         [](const KeySizeWithDistance& a, const KeySizeWithDistance& b) {
-            return a.distance < b.distance;
+            return a.averageEditDistance < b.averageEditDistance;
     });
 
     vector<string> keysUsed;
@@ -49,8 +50,8 @@ std::string break_repeating_key_xor(const std::string& binString) {
             std::ceil(binString.length() / (float)keySize), vector<string>(keySize)
         );
 
-        for (int i = 0; i < binString.length(); i += 8 * keySize) {
-            for (int j = 0; j < 8 * keySize; j += 8) {
+        for (size_t i = 0; i < binString.length(); i += 8 * keySize) {
+            for (size_t j = 0; j < 8 * keySize; j += 8) {
                 if (i + j >= binString.length()) {
                     break;
                 }
@@ -58,19 +59,7 @@ std::string break_repeating_key_xor(const std::string& binString) {
             }
         }
 
-        vector<vector<string>> transposedBlocks(keySize, vector<string>(blocks.size()));
-        for (int i = 0; i < blocks.size(); i++) {
-            for (int j = 0; j < keySize; j++) {
-                if (j > blocks[i].size()) {
-                    // to escape the outer loop
-                    goto exit;
-                    break;
-                }
-                    
-                transposedBlocks[j][i] = blocks[i][j];
-            }
-        }
-        exit:
+        vector<vector<string>> transposedBlocks = transposeMatrix(blocks);
 
         string keyUsed;
         for (auto block : transposedBlocks) {

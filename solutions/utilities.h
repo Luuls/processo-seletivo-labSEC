@@ -69,4 +69,6 @@ CryptoText<unsigned char> decrypt_message(std::string binString);
 
 int hammingDistance(const std::string& binA, const std::string& binB);
 
+std::vector<std::vector<std::string>> transposeMatrix(const std::vector<std::vector<std::string>>& matrix);
+
 #endif //_UTILITIES_H_
